@@ -1,0 +1,12 @@
+{
+    "fullname": "Storage",
+    "author": "ArtMares",
+    "desc": "Storage for applications",
+    "version": "0.1",
+    "includes": [
+        "Storage.php"
+    ],
+    "files": [
+        "Storage.php"
+    ]
+}

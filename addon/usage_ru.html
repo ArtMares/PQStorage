@@ -1,0 +1,98 @@
+Подключите <b>Storage.php</b> в файле <b>main.php</b> и используйте:
+
+<pre>
+  pqinclude("%%projectname%%/%%addonpath%%/Storage.php");
+  
+  class MainWindow extends QWidget {
+    private $storage;
+
+    public function __construct() {
+      parent::__construct();
+
+      // Загрузка класса Хранилище
+      $this->storage = loadStorage();
+
+    }
+
+    /* ... */
+
+    public function process() {
+
+    /* ... */
+
+      $data = array(1, 3, 6, 4);
+
+      // Передаем данные в Хранилище
+      $this->storage->data = $data;
+
+      // Получаем данные из Хранилища
+      // Если данных с таким именем нет в Хранилище то получим null
+      $data = $this->storage->data;
+
+      // Передаем класс в Хранилище для того чтобы в другом классе
+      // вызвать его публичный метод
+      $this->storage->mainWindow = $this;
+
+    /* ... */
+
+    }
+
+    /* ... */
+
+    public function sortData() {
+
+      // Получаем данные из Хранилища
+      $data = $this->storage->data;
+
+      // Производим сортировку данных и записываем обратно в Хранилище
+      $this->storage->data = asort($data);
+
+    }
+
+    /* ... */
+
+  }
+
+  class Page extends QWidget {
+
+    private $storage;
+
+    public function __construct() {
+
+      parent::__construct();
+
+      // Загрузка класса Хранилище
+      $this->storage = loadStorage();
+
+
+      // Получаем данные ранее переданные в Хранилище
+      $data = $this->storage->data;
+
+      print_r($data);
+      // Array(
+      //    [0] => 1
+      //    [1] => 3
+      //    [2] => 6
+      //    [3] => 4
+      // )
+
+      // Вызываем метод другого класса
+      $this->storage->mainWindow->sortData();
+
+      $data = $this->storage->data;
+
+      print_r($data);
+      // Array(
+      //    [0] => 1
+      //    [1] => 3
+      //    [2] => 4
+      //    [3] => 6
+      // )
+
+    }
+
+    /* ... */
+  }
+  
+  /* ... */
+</pre>

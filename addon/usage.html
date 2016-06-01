@@ -1,0 +1,97 @@
+Include <b>Storage.php</b> in your <b>main.php</b> file and usage:
+
+<pre>
+  pqinclude("%%projectname%%/%%addonpath%%/Storage.php");
+  
+  class MainWindow extends QWidget {
+    private $storage;
+
+    public function __construct() {
+      parent::__construct();
+
+      // Loading of the class Storage
+      $this->storage = loadStorage();
+
+    }
+
+    /* ... */
+
+    public function process() {
+
+    /* ... */
+
+      $data = array(1, 3, 6, 4);
+
+      // We transfer data to Storage
+      $this->storage->data = $data;
+
+      // Read data from Strorage
+      // If there are no data with such name in Storage that will receive null
+      $data = $this->storage->data;
+
+      // We transfer a class in Storage in order that in other class to call its public method
+      $this->storage->mainWindow = $this;
+
+    /* ... */
+
+    }
+
+    /* ... */
+
+    public function sortData() {
+
+      // Read data from Strorage
+      $data = $this->storage->data;
+
+      // We make sorting of data and we write back in Storage
+      $this->storage->data = asort($data);
+
+    }
+
+    /* ... */
+
+  }
+
+  class Page extends QWidget {
+
+    private $storage;
+
+    public function __construct() {
+
+      parent::__construct();
+
+      // Loading of the class Storage
+      $this->storage = loadStorage();
+
+
+      // We obtain the data which are earlier transferred to Storage
+      $data = $this->storage->data;
+
+      print_r($data);
+      // Array(
+      //    [0] => 1
+      //    [1] => 3
+      //    [2] => 6
+      //    [3] => 4
+      // )
+
+      // We call a method of other class
+      $this->storage->mainWindow->sortData();
+
+      $data = $this->storage->data;
+
+      print_r($data);
+      // Array(
+      //    [0] => 1
+      //    [1] => 3
+      //    [2] => 4
+      //    [3] => 6
+      // )
+
+    }
+
+    /* ... */
+  }
+  
+  /* ... */
+</pre>
